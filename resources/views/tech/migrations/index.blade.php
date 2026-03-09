@@ -51,7 +51,7 @@
             <div class="col-md-4">
                 <div class="card h-100 shadow-sm">
                     <div class="card-body">
-                        <h2 class="h6 text-uppercase text-muted">Total migrații</h2>
+                        <h2 class="h6 text-uppercase text-muted">Total migratii</h2>
                         <p class="display-6 mb-0">{{ $totals['total'] }}</p>
                         <p class="text-muted small mb-0">Fișiere găsite în proiect.</p>
                     </div>
@@ -62,7 +62,7 @@
                     <div class="card-body">
                         <h2 class="h6 text-uppercase text-muted">Migrații rulate</h2>
                         <p class="display-6 mb-0 text-success">{{ $totals['ran'] }}</p>
-                        <p class="text-muted small mb-0">Ultimul batch rulat: {{ $lastBatch ?? '—' }}</p>
+                        <p class="text-muted small mb-0">Ultimul batch rulat: {{ $lastBatch ?? '-' }}</p>
                     </div>
                 </div>
             </div>

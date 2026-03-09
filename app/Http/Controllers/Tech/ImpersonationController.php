@@ -27,7 +27,7 @@ class ImpersonationController extends Controller
             ->orderByDesc('activ')
             ->orderBy('role')
             ->orderBy('name')
-            ->simplePaginate(25);
+            ->paginate(25);
 
         $users->appends([
             'searchNume' => $searchNume,
@@ -65,10 +65,7 @@ class ImpersonationController extends Controller
 
         Auth::login($user);
 
-        return redirect()->route('acasa')->with(
-            'status',
-            'Acum impersonați contul <strong>' . e($user->name) . '</strong>.'
-        );
+        return redirect()->route('acasa')->with('status', 'Acum impersonați contul ' . $user->name . '.');
     }
 
     public function stop(Request $request): RedirectResponse
@@ -84,10 +81,10 @@ class ImpersonationController extends Controller
 
         if ($originalUser) {
             Auth::login($originalUser);
-            $message = 'Ați revenit la contul <strong>' . e($originalUser->name) . '</strong>.';
+            $message = 'Ați revenit la contul ' . $originalUser->name . '.';
         } else {
             Auth::logout();
-            $displayName = $originalName ? ' (' . e($originalName) . ')' : '';
+            $displayName = $originalName ? ' (' . $originalName . ')' : '';
             $message = 'Sesiunea de impersonare a fost oprită, dar contul inițial' . $displayName . ' nu a mai fost găsit.';
         }
 

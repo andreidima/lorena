@@ -14,17 +14,14 @@ class CheckUserRole
      *
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
-    public function handle(Request $request, Closure $next, ... $roles): Response
+    public function handle(Request $request, Closure $next, ...$roles): Response
     {
-        // Check if the user is authenticated
         if (!$user = Auth::user()) {
-            // Optionally, you can redirect to a login page or abort with a 403 error
             return redirect()->route('login');
         }
 
-        // Check if the user's role is among the permitted roles
-        if (!in_array($user->role, $roles)) {
-            abort(403, 'Unauthorized action.');
+        if (!in_array($user->role, $roles, true)) {
+            abort(403, 'Nu ai permisiunea pentru această acțiune.');
         }
 
         return $next($request);

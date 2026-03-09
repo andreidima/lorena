@@ -6,4 +6,6 @@ return [
     'consumer_secret' => env('WOOCOMMERCE_CS'),
     'version' => env('WOOCOMMERCE_VERSION', 'wc/v3'),
     'per_page' => env('WOOCOMMERCE_PER_PAGE', 50),
+    'auth_method' => env('WOOCOMMERCE_AUTH_METHOD', 'basic'),
+    'timeout' => env('WOOCOMMERCE_TIMEOUT', 30),
 ];

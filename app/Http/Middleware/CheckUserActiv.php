@@ -5,7 +5,6 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
-
 use Illuminate\Support\Facades\Auth;
 
 class CheckUserActiv
@@ -19,7 +18,10 @@ class CheckUserActiv
     {
         if (Auth::check() && Auth::user()->activ != 1) {
             Auth::logout();
-            return redirect()->route('login')->with('error', 'Contul tău este suspendat. Contactează administratorul.');
+
+            return redirect()
+                ->route('login')
+                ->with('error', 'Contul tău este suspendat. Contactează administratorul.');
         }
 
         return $next($request);

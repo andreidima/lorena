@@ -2,20 +2,8 @@
 
 namespace App\Services\WooCommerce\Exceptions;
 
-use Exception;
-use Illuminate\Http\Client\Response;
+use RuntimeException;
 
-class WooCommerceRequestException extends Exception
+class WooCommerceRequestException extends RuntimeException
 {
-    public function __construct(
-        string $message,
-        protected readonly ?Response $response = null
-    ) {
-        parent::__construct($message);
-    }
-
-    public function response(): ?Response
-    {
-        return $this->response;
-    }
 }

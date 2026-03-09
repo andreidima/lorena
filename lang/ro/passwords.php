@@ -18,3 +18,4 @@ return [
     'token'    => 'Codul de resetare a parolei este greșit.',
     'user'     => 'Nu există nici un utilizator cu această adresă de e-mail.',
 ];
+

@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
 use App\Http\Requests\UserRequest;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
@@ -21,18 +21,19 @@ class UserController extends Controller
         $searchNume = $request->searchNume;
         $searchTelefon = $request->searchTelefon;
 
-        $users = User::
-            when($searchNume, function ($query, $searchNume) {
+        $users = User::query()
+            ->when($searchNume, function ($query, $searchNume) {
                 return $query->where('name', 'like', '%' . $searchNume . '%');
             })
             ->when($searchTelefon, function ($query, $searchTelefon) {
                 return $query->where('telefon', 'like', '%' . $searchTelefon . '%');
             })
-            ->where('id', '>', 1) // se sare pentru user 1, Andrei Dima
+            ->where('id', '>', 1)
             ->orderBy('activ', 'desc')
             ->orderBy('role')
             ->orderBy('name')
-            ->simplePaginate(25);
+            ->paginate(25)
+            ->appends($request->query());
 
         return view('users.index', compact('users', 'searchNume', 'searchTelefon'));
     }
@@ -58,12 +59,12 @@ class UserController extends Controller
     public function store(UserRequest $request)
     {
         $data = $request->validated();
-
         $data['password'] = Hash::make($data['password']);
 
         $user = User::create($data);
 
-        return redirect($request->session()->get('returnUrl', route('users.index')))->with('success', 'Utilizatorul <strong>' . e($user->name) . '</strong> a fost adăugat cu succes!');
+        return redirect($request->session()->get('returnUrl', route('users.index')))
+            ->with('success', 'Utilizatorul ' . $user->name . ' a fost adăugat cu succes.');
     }
 
     /**
@@ -112,7 +113,7 @@ class UserController extends Controller
         $user->update($data);
 
         return redirect($request->session()->get('returnUrl', route('users.index')))
-            ->with('status', 'Utilizatorul <strong>' . e($user->name) . '</strong> a fost modificat cu succes!');
+            ->with('status', 'Utilizatorul ' . $user->name . ' a fost modificat cu succes.');
     }
 
     /**
@@ -123,12 +124,8 @@ class UserController extends Controller
      */
     public function destroy(Request $request, User $user)
     {
-        if ($user->miscariStoc()->exists()) {
-            return back()->withErrors("Nu puteți șterge utilizatorul; există mișcări de stoc asociate. E foarte bine dacă doar îl dezactivați.");
-        }
-
         $user->delete();
 
-        return back()->with('status', 'Utilizatorul <strong>' . e($user->name) . '</strong> a fost șters cu succes!');
+        return back()->with('status', 'Utilizatorul ' . $user->name . ' a fost șters cu succes.');
     }
 }

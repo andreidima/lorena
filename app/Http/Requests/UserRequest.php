@@ -31,12 +31,12 @@ class UserRequest extends FormRequest
         ];
     }
 
-    public function messages()
+    public function messages(): array
     {
         return [
-            'password.required' => 'Câmpul parola este obligatoriu.',
-            'password.min' => 'Parola trebuie să aibă minim 8 caractere.',
-            'password.max' => 'Câmpul parola nu poate conține mai mult de 255 de caractere.',
+            'password.required' => 'Câmpul parolă este obligatoriu.',
+            'password.min' => 'Parola trebuie să aibă minimum 8 caractere.',
+            'password.max' => 'Câmpul parolă nu poate conține mai mult de 255 de caractere.',
         ];
     }
 }

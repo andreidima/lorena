@@ -1,8 +1,8 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="mx-3 px-3 card" style="border-radius: 40px 40px 40px 40px;">
-    <div class="row card-header align-items-center" style="border-radius: 40px 40px 0px 0px;">
+<div class="mx-3 px-3 card" style="border-radius: 40px;">
+    <div class="row card-header align-items-center" style="border-radius: 40px 40px 0 0;">
         <div class="col-lg-4">
             <span class="badge culoare1 fs-5">
                 <i class="fa-solid fa-user-secret"></i> Impersonare utilizatori
@@ -10,8 +10,8 @@
         </div>
 
         <div class="col-lg-8">
-            <form class="needs-validation" novalidate method="GET" action="{{ url()->current() }}">
-                <div class="row mb-1 custom-search-form justify-content-end">
+            <form method="GET" action="{{ route('tech.impersonation.index') }}">
+                <div class="row mb-1 custom-search-form justify-content-end g-2">
                     <div class="col-lg-4">
                         <input type="text" class="form-control rounded-3" id="searchNume" name="searchNume" placeholder="Nume" value="{{ $searchNume }}">
                     </div>
@@ -20,12 +20,12 @@
                     </div>
                     <div class="col-lg-2 d-grid">
                         <button class="btn btn-sm btn-primary text-white border border-dark rounded-3" type="submit">
-                            <i class="fas fa-search text-white me-1"></i>Caută
+                            <i class="fas fa-search text-white me-1"></i> Caută
                         </button>
                     </div>
                     <div class="col-lg-2 d-grid">
-                        <a class="btn btn-sm btn-secondary text-white border border-dark rounded-3" href="{{ url()->current() }}" role="button">
-                            <i class="far fa-trash-alt text-white me-1"></i>Resetează
+                        <a class="btn btn-sm btn-secondary text-white border border-dark rounded-3" href="{{ route('tech.impersonation.index') }}" role="button">
+                            <i class="far fa-trash-alt text-white me-1"></i> Resetează
                         </a>
                     </div>
                 </div>
@@ -44,7 +44,7 @@
         <div class="table-responsive rounded">
             <table class="table table-striped table-hover rounded" aria-label="Tabela impersonare utilizatori">
                 <thead class="text-white rounded">
-                    <tr class="thead-danger" style="padding:2rem">
+                    <tr>
                         <th scope="col" class="text-white culoare2" width="5%"><i class="fa-solid fa-hashtag"></i></th>
                         <th scope="col" class="text-white culoare2" width="25%"><i class="fa-solid fa-user me-1"></i> Nume</th>
                         <th scope="col" class="text-white culoare2" width="15%"><i class="fa-solid fa-phone me-1"></i> Telefon</th>
@@ -90,7 +90,7 @@
                                 <i class="fa-solid fa-users-slash fa-2x mb-3 d-block"></i>
                                 <p class="mb-0">Nu s-au găsit utilizatori în baza de date.</p>
                                 @if ($searchNume || $searchTelefon)
-                                    <p class="small mb-0 mt-2">Încercați să modificați criteriile de căutare.</p>
+                                    <p class="small mb-0 mt-2">Încearcă să modifici criteriile de căutare.</p>
                                 @endif
                             </td>
                         </tr>

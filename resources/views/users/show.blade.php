@@ -1,20 +1,20 @@
-@extends ('layouts.app')
+@extends('layouts.app')
 
 @section('content')
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-lg-10">
             <div class="shadow-lg" style="border-radius: 40px;">
-                <div class="border border-secondary p-2 culoare2" style="border-radius: 40px 40px 0px 0px;">
+                <div class="border border-secondary p-2 culoare2" style="border-radius: 40px 40px 0 0;">
                     <span class="badge text-light fs-5">
-                        <i class="fa-solid fa-users me-1"></i> Detalii Utilizator
+                        <i class="fa-solid fa-users me-1"></i> Detalii utilizator
                     </span>
                 </div>
 
-                <div class="card-body border border-secondary p-4" style="border-radius: 0px 0px 40px 40px;">
+                <div class="card-body border border-secondary p-4" style="border-radius: 0 0 40px 40px;">
                     <div class="row">
                         <div class="col-md-6 mb-3">
-                            <strong>Name:</strong> {{ $user->name }}
+                            <strong>Nume:</strong> {{ $user->name }}
                         </div>
                         <div class="col-md-6 mb-3">
                             <strong>Email:</strong> <a href="mailto:{{ $user->email }}">{{ $user->email }}</a>
@@ -23,7 +23,7 @@
                             <strong>Telefon:</strong> {{ $user->telefon }}
                         </div>
                         <div class="col-md-6 mb-3">
-                            <strong>Rol:</strong>{{ $user->role }}
+                            <strong>Rol:</strong> {{ $user->role }}
                         </div>
                         <div class="col-md-6 mb-3">
                             <strong>Stare cont:</strong>
@@ -49,7 +49,6 @@
                             <i class="fa-solid fa-arrow-left me-1"></i> Înapoi
                         </a>
                     </div>
-
                 </div>
             </div>
         </div>

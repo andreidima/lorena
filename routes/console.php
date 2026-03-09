@@ -8,4 +8,9 @@ Artisan::command('inspire', function () {
     $this->comment(Inspiring::quote());
 })->purpose('Display an inspiring quote');
 
-Schedule::command('woocommerce:sync-orders')->hourly();
+if ((bool) env('PARTNER_STOCK_SCHEDULE_ENABLED', false)) {
+    Schedule::command('woocommerce:sync-partner-stocks')
+        ->cron((string) env('PARTNER_STOCK_SCHEDULE_CRON', '*/30 * * * *'))
+        ->withoutOverlapping()
+        ->description('Sync partner stock into WooCommerce');
+}

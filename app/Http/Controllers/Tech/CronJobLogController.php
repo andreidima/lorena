@@ -23,7 +23,7 @@ class CronJobLogController extends Controller
             })
             ->orderByDesc('ran_at')
             ->orderByDesc('id')
-            ->simplePaginate(25);
+            ->paginate(25);
 
         $logs->appends([
             'job' => $jobFilter,

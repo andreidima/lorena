@@ -35,105 +35,49 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                        <li class="nav-item me-3">
-                            <a class="nav-link active" aria-current="page" href="{{ route('produse.index') }}">
-                                <i class="fa-solid fa-box me-1"></i> Produse
+                        <li class="nav-item me-2">
+                            <a class="nav-link nav-icon-link {{ request()->routeIs('acasa') ? 'active' : '' }}" aria-current="page" href="{{ route('acasa') }}" title="Acasă" aria-label="Acasă">
+                                <i class="fa-solid fa-house"></i>
+                                <span class="visually-hidden">Acasă</span>
                             </a>
                         </li>
+                        @can('admin-action')
+                            <li class="nav-item me-2">
+                                <a class="nav-link nav-icon-link {{ request()->routeIs('users.*') ? 'active' : '' }}" href="{{ route('users.index') }}" title="Utilizatori" aria-label="Utilizatori">
+                                    <i class="fa-solid fa-users"></i>
+                                    <span class="visually-hidden">Utilizatori</span>
+                                </a>
+                            </li>
+                        @endcan
                         @php
-                            $ordersActive = request()->routeIs('comenzi.iesiri.*') || request()->routeIs('woocommerce.orders.*');
+                            $moduleMenu = \App\Support\Modules\ModuleRegistry::modules();
                         @endphp
-                        <li class="nav-item me-3 dropdown">
-                            <a class="nav-link dropdown-toggle {{ $ordersActive ? 'active' : '' }}" href="#" id="ordersDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="fa-solid fa-list-check me-1"></i> Comenzi
-                            </a>
-                            <ul class="dropdown-menu" aria-labelledby="ordersDropdown">
-                                <li>
-                                    <a class="dropdown-item {{ request()->routeIs('comenzi.iesiri.*') ? 'active' : '' }}" href="{{ route('comenzi.iesiri.index') }}">
-                                        <i class="fa-solid fa-dolly me-1"></i> Comenzi ieșiri
-                                    </a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item {{ request()->routeIs('woocommerce.orders.*') ? 'active' : '' }}" href="{{ route('woocommerce.orders.index') }}">
-                                        <i class="fa-solid fa-store me-1"></i> Comenzi site
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                        @php
-                            $procurementActive = request()->routeIs('procurement.purchase-orders.*');
-                            $procurementStatusIcons = [
-                                \App\Models\Procurement\PurchaseOrder::STATUS_DRAFT => 'fa-pen-to-square',
-                                \App\Models\Procurement\PurchaseOrder::STATUS_PENDING => 'fa-hourglass-half',
-                                \App\Models\Procurement\PurchaseOrder::STATUS_SENT => 'fa-paper-plane',
-                                \App\Models\Procurement\PurchaseOrder::STATUS_PARTIAL => 'fa-truck',
-                                \App\Models\Procurement\PurchaseOrder::STATUS_RECEIVED => 'fa-circle-check',
-                                \App\Models\Procurement\PurchaseOrder::STATUS_CANCELLED => 'fa-ban',
-                            ];
-                            $procurementStatusLabels = [
-                                \App\Models\Procurement\PurchaseOrder::STATUS_DRAFT => 'Ciornă',
-                                \App\Models\Procurement\PurchaseOrder::STATUS_PENDING => 'În așteptare',
-                                \App\Models\Procurement\PurchaseOrder::STATUS_SENT => 'Trimisă',
-                                \App\Models\Procurement\PurchaseOrder::STATUS_PARTIAL => 'Parțială',
-                                \App\Models\Procurement\PurchaseOrder::STATUS_RECEIVED => 'Recepționată',
-                                \App\Models\Procurement\PurchaseOrder::STATUS_CANCELLED => 'Anulată',
-                            ];
-                        @endphp
-                        <li class="nav-item me-3 dropdown">
-                            <a class="nav-link dropdown-toggle {{ $procurementActive ? 'active' : '' }}" href="#" id="procurementDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="fa-solid fa-clipboard-list me-1"></i> Achiziții
-                            </a>
-                            <ul class="dropdown-menu" aria-labelledby="procurementDropdown">
-                                <li>
-                                    <a class="dropdown-item {{ request()->routeIs('procurement.purchase-orders.index') && ! request('status') ? 'active' : '' }}" href="{{ route('procurement.purchase-orders.index') }}">
-                                        <i class="fa-solid fa-clipboard-list me-1"></i> Toate comenzile
-                                    </a>
-                                </li>
-                                @foreach (\App\Models\Procurement\PurchaseOrder::STATUSES as $status)
+                        @foreach ($moduleMenu as $moduleKey => $moduleConfig)
+                            @php
+                                $moduleActive = request()->routeIs('modules.' . $moduleKey . '.*');
+                                $dropdownId = 'moduleDropdown' . str_replace('-', '', $moduleKey);
+                            @endphp
+                            <li class="nav-item me-3 dropdown">
+                                <a class="nav-link dropdown-toggle {{ $moduleActive ? 'active' : '' }}" href="#" id="{{ $dropdownId }}" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="fa-solid {{ $moduleConfig['icon'] ?? 'fa-table' }} me-1"></i> {{ \App\Support\Modules\DashboardAnalytics::displayModuleLabel($moduleKey, $moduleConfig['label'] ?? $moduleKey) }}
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="{{ $dropdownId }}">
                                     <li>
-                                        <a class="dropdown-item {{ request()->routeIs('procurement.purchase-orders.index') && request('status') === $status ? 'active' : '' }}" href="{{ route('procurement.purchase-orders.index', ['status' => $status]) }}">
-                                            <i class="fa-solid {{ $procurementStatusIcons[$status] ?? 'fa-circle' }} me-1"></i> {{ $procurementStatusLabels[$status] ?? ucfirst($status) }}
+                                        <a class="dropdown-item {{ request()->routeIs('modules.' . $moduleKey . '.dashboard') ? 'active' : '' }}" href="{{ route('modules.' . $moduleKey . '.dashboard') }}">
+                                            <i class="fa-solid fa-chart-pie me-1"></i> Panou {{ \App\Support\Modules\DashboardAnalytics::displayModuleLabel($moduleKey, $moduleConfig['label'] ?? $moduleKey) }}
                                         </a>
                                     </li>
-                                @endforeach
-                                <li><hr class="dropdown-divider"></li>
-                                <li>
-                                    <a class="dropdown-item {{ request()->routeIs('procurement.purchase-orders.create') ? 'active' : '' }}" href="{{ route('procurement.purchase-orders.create') }}">
-                                        <i class="fa-solid fa-plus me-1"></i> Comandă nouă
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="nav-item me-3">
-                            <a class="nav-link active" aria-current="page" href="{{ route('miscari.intrari') }}">
-                                <i class="fa-solid fa-plus-circle me-1"></i> Intrări
-                            </a>
-                        </li>
-                        <li class="nav-item me-3">
-                            <a class="nav-link active" aria-current="page" href="{{ route('miscari.iesiri') }}">
-                                <i class="fa-solid fa-minus-circle me-1"></i> Ieșiri
-                            </a>
-                        </li>
-                        <li class="nav-item me-3 dropdown">
-                            <a class="nav-link active dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="fa-solid fa-cubes"></i> Resurse
-                            </a>
-                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <li>
-                                    <a class="dropdown-item" href="{{ route('categorii.index') }}">
-                                        <i class="fa-solid fa-tags"></i> Categorii produse
-                                    </a>
-                                </li>
-                                @can('admin-action')
                                     <li><hr class="dropdown-divider"></li>
-                                    <li>
-                                        <a class="dropdown-item" href="{{ route('users.index') }}">
-                                            <i class="fa-solid fa-users"></i> Utilizatori
-                                        </a>
-                                    </li>
-                                @endcan
-                            </ul>
-                        </li>
+                                    @foreach (($moduleConfig['entities'] ?? []) as $entityKey => $entityConfig)
+                                        <li>
+                                            <a class="dropdown-item {{ request()->routeIs('modules.' . $moduleKey . '.' . $entityKey . '.*') ? 'active' : '' }}" href="{{ route('modules.' . $moduleKey . '.' . $entityKey . '.index') }}">
+                                                <i class="fa-solid {{ $entityConfig['icon'] ?? 'fa-table' }} me-1"></i> {{ \App\Support\Modules\DashboardAnalytics::displayEntityLabel($entityConfig['label']) }}
+                                            </a>
+                                        </li>
+                                    @endforeach
+                                </ul>
+                            </li>
+                        @endforeach
                         @can('super-admin-action')
                             @php
                                 $techActive = request()->routeIs('tech.*');
@@ -151,6 +95,11 @@
                                     <li>
                                         <a class="dropdown-item {{ request()->routeIs('tech.cronjobs.*') ? 'active' : '' }}" href="{{ route('tech.cronjobs.index') }}">
                                             <i class="fa-solid fa-clock-rotate-left me-1"></i> Jurnale cronjob
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item {{ request()->routeIs('tech.partner-stock.*') ? 'active' : '' }}" href="{{ route('tech.partner-stock.index') }}">
+                                            <i class="fa-solid fa-boxes-stacked me-1"></i> Stocuri partener API
                                         </a>
                                     </li>
                                     <li>
@@ -233,7 +182,7 @@
     <footer class="mt-auto py-2 text-center text-white culoare1">
         <div class="">
             <p class="mb-1">
-                © {{ date('Y') }} {{ config('app.name', 'Laravel') }}
+                (c) {{ date('Y') }} {{ config('app.name', 'Laravel') }}
             </p>
             <span class="text-white">
                 <a href="https://validsoftware.ro/dezvoltare-aplicatii-web-personalizate/" class="text-white" target="_blank">
@@ -245,5 +194,6 @@
             </span>
         </div>
     </footer>
+    @stack('scripts')
 </body>
 </html>
